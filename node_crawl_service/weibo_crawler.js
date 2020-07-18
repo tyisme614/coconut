@@ -22,7 +22,8 @@ function CrawlWorker(){
         let config_crawler = JSON.parse(fs.readFileSync(weibo_crawler + crawler_config));
         //config user list file
         config_crawler.user_id_list = weibo_user_list;
-        config_crawler.since_date = oneHourBeforeTimestamp();
+        let start_time = oneHourBeforeTimestamp();
+        config_crawler.since_date = start_time;
         //delete previous config.json
         fs.unlinkSync(weibo_crawler + crawler_config);
         fs.writeFileSync(weibo_crawler + crawler_config, JSON.stringify(config_crawler));
@@ -31,7 +32,7 @@ function CrawlWorker(){
         //command --> python3.8 -m weibo_spider --config_path="config.json"
         let cmd = spawn(python, ['-m', 'weibo_spider', '--config_path=config.json']);
         cmd.stdout.on('data', (data) => {
-            console.log('[weibo_spider output] ' + data);
+            console.log('[weibo_spider output] start time-->' + start_time + '\n' + data);
         });
 
         cmd.stderr.on('data', (data) => {
