@@ -1,5 +1,5 @@
 {
-  "python_cmd" : "python3.8",
+  "python_cmd" : "python binary path",
   "crawler_base_path" : "path of crawler application",
   "weibo_user_list_path" : "path of user list file"
 
