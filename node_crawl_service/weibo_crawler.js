@@ -103,6 +103,6 @@ function oneHourBeforeTimestamp(){
     let second = date_ob.getSeconds();
     second = second < 10? '0' + second : second;
 
-    return year + "-" + month + "-" + date + ' ' + hour + ':' + minute +':' + second;
+    return year + "-" + month + "-" + date + ' ' + hour + ':' + minute;
 
 }
