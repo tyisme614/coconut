@@ -50,6 +50,8 @@ function CrawlWorker(){
 
 }
 
+//initial process
+CrawlWorker();
 //start worker
 crawlWorker = setInterval(CrawlWorker, 3600000);//crawl weibo data per hour
 
