@@ -19,7 +19,7 @@ function AnalyzeWorker(){
         startAnalyzing = true;
         start_time = getTimestamp(3);//3 hours before
         end_time = getTimestamp(0);//present time
-        let sql = 'select id,user_id,content,article_url,video_url,original,up_num,retweet_num,comment_num,publish_time from weibo where publish_time>' + start_time +'and publish_time<'+ end_time + '';
+        let sql = 'select id,user_id,content,article_url,video_url,original,up_num,retweet_num,comment_num,publish_time from weibo where publish_time>' + start_time +' and publish_time<'+ end_time;
         connection.query(sql, function (error, results, fields) {
             if (error) throw error;
             let len = results.length;
