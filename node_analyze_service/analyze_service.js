@@ -55,21 +55,21 @@ function AnalyzeWorker(){
                         top_like_news[0] = item;
                     }else{
                         let j;
-                        let len = top_like_news.length >= 20? 20: top_like_news.length;
-                        for(j=0; j<len; j++){
+                        let len2 = top_like_news.length >= 20? 20: top_like_news.length;
+                        for(j=0; j<len2; j++){
                             let w = top_like_news[j];
                             if(w.up_num < item.up_num){
                                 //found position
                                 top_like_news[j] = item;
 
-                                for(let k=j+1; k<len; k++){
+                                for(let k=j+1; k<len2; k++){
                                     let tmp = top_like_news[k];
                                     top_like_news[k] = w;
                                     w = tmp;
                                 }
                             }
                         }
-                        if(j == len){
+                        if(j == len2){
                             //item should be the last one in list
                             top_like_news[j] = item;
 
@@ -82,21 +82,21 @@ function AnalyzeWorker(){
                             top_repost_news[0] = item;
                         } else {
                             let j;
-                            let len = top_repost_news.length >= 20 ? 20 : top_repost_news.length;
-                            for (j = 0; j < len; j++) {
+                            let len2 = top_repost_news.length >= 20 ? 20 : top_repost_news.length;
+                            for (j = 0; j < len2; j++) {
                                 let w = top_repost_news[j];
                                 if (w.up_num < item.up_num) {
                                     //found position
                                     top_repost_news[j] = item;
 
-                                    for (let k = j + 1; k < len; k++) {
+                                    for (let k = j + 1; k < len2; k++) {
                                         let tmp = top_repost_news[k];
                                         top_repost_news[k] = w;
                                         w = tmp;
                                     }
                                 }
                             }
-                            if (j == len) {
+                            if (j == len2) {
                                 //item should be the last one in list
                                 top_repost_news[j] = item;
 
@@ -110,21 +110,21 @@ function AnalyzeWorker(){
                             top_comment_news[0] = item;
                         } else {
                             let j;
-                            let len = top_comment_news.length >= 20 ? 20 : top_comment_news.length;
-                            for (j = 0; j < len; j++) {
+                            let len2 = top_comment_news.length >= 20 ? 20 : top_comment_news.length;
+                            for (j = 0; j < len2; j++) {
                                 let w = top_comment_news[j];
                                 if (w.up_num < item.up_num) {
                                     //found position
                                     top_comment_news[j] = item;
 
-                                    for (let k = j + 1; k < len; k++) {
+                                    for (let k = j + 1; k < len2; k++) {
                                         let tmp = top_comment_news[k];
                                         top_comment_news[k] = w;
                                         w = tmp;
                                     }
                                 }
                             }
-                            if (j == len) {
+                            if (j == len2) {
                                 //item should be the last one in list
                                 top_comment_news[j] = item;
 
