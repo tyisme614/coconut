@@ -1,12 +1,10 @@
 const mysql = require('mysql');
 const fs = require('fs');
+const process = require('process');
 const base_path = __dirname + '/rank_result/';
 
 if(!fs.existsSync(base_path)){
-    if(!fs.mkdirSync(base_path)){
-        console.error('unable to create rank_result folder, exit.');
-        Process.exit(-1);
-    }
+    fs.mkdirSync(base_path);
 }
 
 let start_time;
