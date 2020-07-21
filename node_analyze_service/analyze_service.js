@@ -85,7 +85,7 @@ function AnalyzeWorker(){
                             let len2 = top_repost_news.length >= 20 ? 20 : top_repost_news.length;
                             for (j = 0; j < len2; j++) {
                                 let w = top_repost_news[j];
-                                if (w.up_num < item.up_num) {
+                                if (w.retweet_num < item.retweet_num) {
                                     //found position
                                     top_repost_news[j] = item;
 
@@ -114,7 +114,7 @@ function AnalyzeWorker(){
                             let len2 = top_comment_news.length >= 20 ? 20 : top_comment_news.length;
                             for (j = 0; j < len2; j++) {
                                 let w = top_comment_news[j];
-                                if (w.up_num < item.up_num) {
+                                if (w.comment_num < item.comment_num) {
                                     //found position
                                     top_comment_news[j] = item;
 
