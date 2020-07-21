@@ -67,12 +67,12 @@ function AnalyzeWorker(){
                                     top_like_news[k] = w;
                                     w = tmp;
                                 }
+                                break;
                             }
                         }
                         if(j == len2){
                             //item should be the last one in list
                             top_like_news[j] = item;
-
                         }
                     }
                     console.log('sort top repost news');
@@ -94,6 +94,7 @@ function AnalyzeWorker(){
                                         top_repost_news[k] = w;
                                         w = tmp;
                                     }
+                                    break;
                                 }
                             }
                             if (j == len2) {
@@ -122,6 +123,7 @@ function AnalyzeWorker(){
                                         top_comment_news[k] = w;
                                         w = tmp;
                                     }
+                                    break;
                                 }
                             }
                             if (j == len2) {
