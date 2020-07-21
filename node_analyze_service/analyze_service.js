@@ -74,70 +74,152 @@ function AnalyzeWorker(){
                             //item should be the last one in list
                             top_like_news[j] = item;
                         }
-                    }
-                    console.log('sort top repost news');
-                    if(list_news.includes(user_id)) {
-                        console.log('sort top repost news');
-                        if (top_repost_news.length == 0) {
-                            top_repost_news[0] = item;
-                        } else {
-                            let j;
-                            let len2 = top_repost_news.length >= 20 ? 20 : top_repost_news.length;
-                            for (j = 0; j < len2; j++) {
-                                let w = top_repost_news[j];
-                                if (w.retweet_num < item.retweet_num) {
-                                    //found position
-                                    top_repost_news[j] = item;
 
-                                    for (let k = j + 1; k < len2; k++) {
-                                        let tmp = top_repost_news[k];
-                                        top_repost_news[k] = w;
-                                        w = tmp;
-                                    }
-                                    break;
-                                }
-                            }
-                            if (j == len2) {
-                                //item should be the last one in list
+                    }//end of top like news
+
+                    console.log('sort top repost news');
+                    if (top_repost_news.length == 0) {
+                        top_repost_news[0] = item;
+                    } else {
+                        let j;
+                        let len2 = top_repost_news.length >= 20 ? 20 : top_repost_news.length;
+                        for (j = 0; j < len2; j++) {
+                            let w = top_repost_news[j];
+                            if (w.retweet_num < item.retweet_num) {
+                                //found position
                                 top_repost_news[j] = item;
 
+                                for (let k = j + 1; k < len2; k++) {
+                                    let tmp = top_repost_news[k];
+                                    top_repost_news[k] = w;
+                                    w = tmp;
+                                }
+                                break;
                             }
                         }
-                    }
-                    console.log('sort top comment news');
-                    if(list_news.includes(user_id)) {
-                        console.log('sort top repost news');
-                        if (top_comment_news.length == 0) {
-                            top_comment_news[0] = item;
-                        } else {
-                            let j;
-                            let len2 = top_comment_news.length >= 20 ? 20 : top_comment_news.length;
-                            for (j = 0; j < len2; j++) {
-                                let w = top_comment_news[j];
-                                if (w.comment_num < item.comment_num) {
-                                    //found position
-                                    top_comment_news[j] = item;
+                        if (j == len2) {
+                            //item should be the last one in list
+                            top_repost_news[j] = item;
 
-                                    for (let k = j + 1; k < len2; k++) {
-                                        let tmp = top_comment_news[k];
-                                        top_comment_news[k] = w;
-                                        w = tmp;
-                                    }
-                                    break;
-                                }
-                            }
-                            if (j == len2) {
-                                //item should be the last one in list
+                        }
+                    }//end of repost news
+
+                    console.log('sort top comment news');
+                    if (top_comment_news.length == 0) {
+                        top_comment_news[0] = item;
+                    } else {
+                        let j;
+                        let len2 = top_comment_news.length >= 20 ? 20 : top_comment_news.length;
+                        for (j = 0; j < len2; j++) {
+                            let w = top_comment_news[j];
+                            if (w.comment_num < item.comment_num) {
+                                //found position
                                 top_comment_news[j] = item;
 
+                                for (let k = j + 1; k < len2; k++) {
+                                    let tmp = top_comment_news[k];
+                                    top_comment_news[k] = w;
+                                    w = tmp;
+                                }
+                                break;
                             }
                         }
-                    }
+                        if (j == len2) {
+                            //item should be the last one in list
+                            top_comment_news[j] = item;
+
+                        }
+                    }//end of top comment news
+
+                }else if(list_enterntain.includes(user_id)){
+                    console.log('sort top like enterntain');
+                    if(top_like_entertain.length == 0){
+                        top_like_entertain[0] = item;
+                    }else{
+                        let j;
+                        let len2 = top_like_entertain.length >= 20? 20: top_like_entertain.length;
+                        for(j=0; j<len2; j++){
+                            let w = top_like_entertain[j];
+                            if(w.up_num < item.up_num){
+                                //found position
+                                top_like_entertain[j] = item;
+
+                                for(let k=j+1; k<len2; k++){
+                                    let tmp = top_like_entertain[k];
+                                    top_like_entertain[k] = w;
+                                    w = tmp;
+                                }
+                                break;
+                            }
+                        }
+                        if(j == len2){
+                            //item should be the last one in list
+                            top_like_entertain[j] = item;
+                        }
+
+                    }//end of top like news
+
+                    console.log('sort top repost entertain');
+                    if (top_repost_entertain.length == 0) {
+                        top_repost_entertain[0] = item;
+                    } else {
+                        let j;
+                        let len2 = top_repost_entertain.length >= 20 ? 20 : top_repost_entertain.length;
+                        for (j = 0; j < len2; j++) {
+                            let w = top_repost_entertain[j];
+                            if (w.retweet_num < item.retweet_num) {
+                                //found position
+                                top_repost_entertain[j] = item;
+
+                                for (let k = j + 1; k < len2; k++) {
+                                    let tmp = top_repost_entertain[k];
+                                    top_repost_entertain[k] = w;
+                                    w = tmp;
+                                }
+                                break;
+                            }
+                        }
+                        if (j == len2) {
+                            //item should be the last one in list
+                            top_repost_entertain[j] = item;
+
+                        }
+                    }//end of repost news
+
+                    console.log('sort top comment entertain');
+                    if (top_comment_entertain.length == 0) {
+                        top_comment_entertain[0] = item;
+                    } else {
+                        let j;
+                        let len2 = top_comment_entertain.length >= 20 ? 20 : top_comment_entertain.length;
+                        for (j = 0; j < len2; j++) {
+                            let w = top_comment_entertain[j];
+                            if (w.comment_num < item.comment_num) {
+                                //found position
+                                top_comment_entertain[j] = item;
+
+                                for (let k = j + 1; k < len2; k++) {
+                                    let tmp = top_comment_entertain[k];
+                                    top_comment_entertain[k] = w;
+                                    w = tmp;
+                                }
+                                break;
+                            }
+                        }
+                        if (j == len2) {
+                            //item should be the last one in list
+                            top_comment_entertain[j] = item;
+
+                        }
+                    }//end of top comment news
                 }
             }
-            writeToLocalFile(JSON.stringify(top_like_news), base_path + currentTimestamp()  + '_top_like.json');
-            writeToLocalFile(JSON.stringify(top_repost_news), base_path + currentTimestamp()  + '_top_repost.json');
-            writeToLocalFile(JSON.stringify(top_comment_news), base_path + currentTimestamp()  + '_top_comment.json');
+            writeToLocalFile(JSON.stringify(top_like_news), base_path + currentTimestamp()  + '_top_like_news.json');
+            writeToLocalFile(JSON.stringify(top_repost_news), base_path + currentTimestamp()  + '_top_repost_news.json');
+            writeToLocalFile(JSON.stringify(top_comment_news), base_path + currentTimestamp()  + '_top_comment_news.json');
+            writeToLocalFile(JSON.stringify(top_like_entertain), base_path + currentTimestamp()  + '_top_like_entertain.json');
+            writeToLocalFile(JSON.stringify(top_repost_entertain), base_path + currentTimestamp()  + '_top_repost_entertain.json');
+            writeToLocalFile(JSON.stringify(top_comment_entertain), base_path + currentTimestamp()  + '_top_comment_entertain.json');
             startAnalyzing = false;
 
         });
@@ -147,7 +229,7 @@ function AnalyzeWorker(){
 
 //initial analyze
 AnalyzeWorker();
-analyzeWorker = setInterval(AnalyzeWorker, 600000);//start analyzing at interval of 10 minutes, analyze the data of the previous 3 hours
+analyzeWorker = setInterval(AnalyzeWorker, 1800000);//start analyzing at interval of 30 minutes, analyze the data of the previous 3 hours
 
 
 function writeToLocalFile(data, file){
