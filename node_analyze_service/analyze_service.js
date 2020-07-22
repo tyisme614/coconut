@@ -37,14 +37,19 @@ mysqlDB.connect();
 
 function AnalyzeWorker(){
     if(!startAnalyzing){
+
         startAnalyzing = true;
         start_time = getTimestamp(1);//24 hours before
         end_time = getTimestamp(0);//present time
+        console.log('start analyzing...\n start time-->' + start_time + '\nend time-->' + end_time);
         let sql = 'select id,user_id,content,article_url,video_url,original,up_num,retweet_num,comment_num,publish_time from weibo where publish_time>"' + start_time +'" and publish_time<"'+ end_time + '"';
         mysqlDB.query(sql, function (error, results, fields) {
             if (error) throw error;
             let len = results.length;
             console.log('found ' + len + ' results');
+            if(len == 0){
+                return;
+            }
             let top_like_news = [];
             let top_repost_news = [];
             let top_comment_news = [];
