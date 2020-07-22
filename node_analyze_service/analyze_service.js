@@ -3,6 +3,14 @@ const fs = require('fs');
 const process = require('process');
 const base_path = __dirname + '/rank_result/';
 
+//record types
+const TYPE_NEWS_TOP_LIKE = 1001;
+const TYPE_NEWS_TOP_COMMENT = 1002;
+const TYPE_NEWS_TOP_REPOST = 1003;
+const TYPE_ENTERNTAIN_TOP_LIKE = 1004;
+const TYPE_ENTERNTAIN_TOP_COMMENT = 1005;
+const TYPE_ENTERNTAIN_TOP_REPOST = 1006;
+
 if(!fs.existsSync(base_path)){
     fs.mkdirSync(base_path);
 }
@@ -23,9 +31,9 @@ const list_news = ['1642088277', '1638782947', '1649173367', '2028810631', '2258
 let config = JSON.parse(fs.readFileSync(__dirname + '/config.json').toString());
 
 
-let connection = mysql.createConnection(config);
+let mysqlDB = mysql.createConnection(config);
 console.log('start connecting to mysql');
-connection.connect();
+mysqlDB.connect();
 
 function AnalyzeWorker(){
     if(!startAnalyzing){
@@ -33,7 +41,7 @@ function AnalyzeWorker(){
         start_time = getTimestamp(3);//3 hours before
         end_time = getTimestamp(0);//present time
         let sql = 'select id,user_id,content,article_url,video_url,original,up_num,retweet_num,comment_num,publish_time from weibo where publish_time>"' + start_time +'" and publish_time<"'+ end_time + '"';
-        connection.query(sql, function (error, results, fields) {
+        mysqlDB.query(sql, function (error, results, fields) {
             if (error) throw error;
             let len = results.length;
             console.log('found ' + len + ' results');
@@ -214,12 +222,26 @@ function AnalyzeWorker(){
                     }//end of top comment news
                 }
             }
-            writeToLocalFile(JSON.stringify(top_like_news), base_path + currentTimestamp()  + '_top_like_news.json');
-            writeToLocalFile(JSON.stringify(top_repost_news), base_path + currentTimestamp()  + '_top_repost_news.json');
-            writeToLocalFile(JSON.stringify(top_comment_news), base_path + currentTimestamp()  + '_top_comment_news.json');
-            writeToLocalFile(JSON.stringify(top_like_entertain), base_path + currentTimestamp()  + '_top_like_entertain.json');
-            writeToLocalFile(JSON.stringify(top_repost_entertain), base_path + currentTimestamp()  + '_top_repost_entertain.json');
-            writeToLocalFile(JSON.stringify(top_comment_entertain), base_path + currentTimestamp()  + '_top_comment_entertain.json');
+            let ts = currentTimestamp();
+            let epoch = currentEpochTime();
+            writeToLocalFile(JSON.stringify(top_like_news), base_path + ts  + '_top_like_news.json');
+            writeToDatabase('top_like_news_' + ts, TYPE_NEWS_TOP_LIKE,base_path + ts  + '_top_like_news.json', ts, epoch);
+
+            writeToLocalFile(JSON.stringify(top_repost_news), base_path + ts  + '_top_repost_news.json');
+            writeToDatabase('top_repost_news_' + ts, TYPE_NEWS_TOP_REPOST,base_path + ts  + '_top_repost_news.json', ts, epoch);
+
+            writeToLocalFile(JSON.stringify(top_comment_news), base_path + ts  + '_top_comment_news.json');
+            writeToDatabase('top_comment_news_' + ts, TYPE_NEWS_TOP_COMMENT,base_path + ts  + '_top_like_news.json', ts, epoch);
+
+            writeToLocalFile(JSON.stringify(top_like_entertain), base_path + ts  + '_top_like_entertain.json');
+            writeToDatabase('top_like_entertain_' + ts, TYPE_ENTERNTAIN_TOP_LIKE,base_path + ts  + '_top_like_entertain.json', ts, epoch);
+
+            writeToLocalFile(JSON.stringify(top_repost_entertain), base_path + ts  + '_top_repost_entertain.json');
+            writeToDatabase('top_repost_entertain_' + ts, TYPE_ENTERNTAIN_TOP_REPOST,base_path + ts  + '_top_repost_entertain.json', ts, epoch);
+
+            writeToLocalFile(JSON.stringify(top_comment_entertain), base_path + ts  + '_top_comment_entertain.json');
+            writeToDatabase('top_comment_entertain_' + ts, TYPE_ENTERNTAIN_TOP_COMMENT,base_path + ts  + '_top_comment_entertain.json', ts, epoch);
+
             startAnalyzing = false;
 
         });
@@ -238,6 +260,15 @@ function writeToLocalFile(data, file){
            console.error(err.toString());
        else
             console.log('finished creating ' + file);
+    });
+}
+
+
+function writeToDatabase(title, type, path, time, timestamp){
+    let sql = 'INSERT INTO analyze_record(title, type, path, time, timestamp) VALUES("'+ title +'", "' + type + '",  "' + path + '",  "' + time + '",  "' + timestamp + '")';
+    mysqlDB.query(sql, function (error, results, fields) {
+        if (error) throw error;
+        console.log(JSON.stringify(results));
     });
 }
 
@@ -264,6 +295,13 @@ function getTimestamp(offset){
 
     return year + "-" + month + "-" + date + ' ' + hour + ':' + minute +':' + second;
 
+}
+
+function currentEpochTime(){
+    let timezoneOffset = new Date().getTimezoneOffset();//in minutes
+    let epoch = Date.now() + timezoneOffset * 60 * 1000;
+
+    return epoch;
 }
 
 function currentTimestamp(){
