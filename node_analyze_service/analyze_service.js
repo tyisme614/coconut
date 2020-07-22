@@ -38,7 +38,7 @@ mysqlDB.connect();
 function AnalyzeWorker(){
     if(!startAnalyzing){
         startAnalyzing = true;
-        start_time = getTimestamp(24);//24 hours before
+        start_time = getTimestamp(1);//24 hours before
         end_time = getTimestamp(0);//present time
         let sql = 'select id,user_id,content,article_url,video_url,original,up_num,retweet_num,comment_num,publish_time from weibo where publish_time>"' + start_time +'" and publish_time<"'+ end_time + '"';
         mysqlDB.query(sql, function (error, results, fields) {
@@ -277,14 +277,14 @@ function getTimestamp(offset){
     let ts = Date.now();
 
     let date_ob = new Date(ts);
-    let date = date_ob.getDate();
+    let date = date_ob.getDate() - 1;
     date = date < 10? '0' + date : date;
     let month = date_ob.getMonth() + 1;
     month = month < 10? '0' + month : month;
 
     let year = date_ob.getFullYear();
 
-    let hour = date_ob.getHours() - offset;
+    let hour = date_ob.getHours();
     hour = hour < 10? '0' + hour : hour;
 
     let minute = date_ob.getMinutes();
