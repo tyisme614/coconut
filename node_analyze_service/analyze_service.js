@@ -277,7 +277,7 @@ function getTimestamp(offset){
     let ts = Date.now();
 
     let date_ob = new Date(ts);
-    let date = date_ob.getDate() - 1;
+    let date = date_ob.getDate() - offset;
     date = date < 10? '0' + date : date;
     let month = date_ob.getMonth() + 1;
     month = month < 10? '0' + month : month;
