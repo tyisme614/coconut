@@ -38,7 +38,7 @@ mysqlDB.connect();
 function AnalyzeWorker(){
     if(!startAnalyzing){
         startAnalyzing = true;
-        start_time = getTimestamp(3);//3 hours before
+        start_time = getTimestamp(24);//24 hours before
         end_time = getTimestamp(0);//present time
         let sql = 'select id,user_id,content,article_url,video_url,original,up_num,retweet_num,comment_num,publish_time from weibo where publish_time>"' + start_time +'" and publish_time<"'+ end_time + '"';
         mysqlDB.query(sql, function (error, results, fields) {
@@ -251,7 +251,7 @@ function AnalyzeWorker(){
 
 //initial analyze
 AnalyzeWorker();
-analyzeWorker = setInterval(AnalyzeWorker, 1800000);//start analyzing at interval of 30 minutes, analyze the data of the previous 3 hours
+analyzeWorker = setInterval(AnalyzeWorker, 1800000);//start analyzing at interval of 30 minutes, analyze the data of the previous 24 hours
 
 
 function writeToLocalFile(data, file){
