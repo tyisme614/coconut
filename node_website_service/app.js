@@ -89,4 +89,4 @@ const initializeWebsocket = function(s){
 
 
 module.exports = app;
-module.initializeSocket = initializeWebsocket;
+module.exports = initializeWebsocket;
