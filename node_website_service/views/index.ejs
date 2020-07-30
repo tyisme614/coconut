@@ -38,6 +38,7 @@
 <script type="text/javascript">
   //initialize websocket
   let d = new Date();
+  let heartbeatWorker;
       const socket = io({
         query:{
           token: d.getTime()
@@ -45,12 +46,17 @@
       });
       socket.connect();
   socket.on('connect',function() {
-    console.log('Client has connected to the server!');
+    console.log('Client has connected to the server! start interval');
+    heartbeatWorker = setInterval(heartbeat, 5000);
+
   });
   // Add a connect listener
   socket.on('message',function(data) {
     let msg = JSON.parse(data);
     switch(msg.type){
+      case 1000://response of heartbeat message
+              console.log('received heartbeat response-->' + msg.content);
+        break;
       case 1001:
         //refresh list
             break;
@@ -59,9 +65,15 @@
   });
   // Add a disconnect listener
   socket.on('disconnect',function() {
-    console.log('The client has disconnected!');
-
+    console.log('The client has disconnected! clean interval');
+    clearInterval(heartbeatWorker);
   });
 
+  function heartbeat(){
+      let msg = {};
+      msg.type = 1000;
+      msg.content = 'heartbeat message';
+      socket.send(JSON.stringify(msg));
+  }
 </script>
 </html>
