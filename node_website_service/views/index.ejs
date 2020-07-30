@@ -37,6 +37,7 @@
   </body>
 <script type="text/javascript">
   //initialize websocket
+  const io = require('socket.io');
   let d = new Date();
   let heartbeatWorker;
       const socket = io({
