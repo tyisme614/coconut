@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 
 let clients = [];
-let server;
+
 //routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -47,7 +47,7 @@ app.use(function(err, req, res, next) {
   let socket;
 
 
-const initializeWebsocket = function(s){
+let initializeWebsocket = function(s){
     console.log('initialize socket');
     socket = s;
     socket.on('connection', (client) =>{
@@ -69,7 +69,7 @@ const initializeWebsocket = function(s){
         }
 
         client.on('message', (data)=>{
-            console.log('Received message from client!' , msg);
+            console.log('Received message from client!' , data);
             let msg = JSON.parse(data);
             console.log('type -->' + msg.type);
             switch(msg.type){
@@ -87,6 +87,5 @@ const initializeWebsocket = function(s){
     });
 }
 
-
-module.exports = app;
-module.exports = initializeWebsocket;
+module.exports.initializeWebsocket = initializeWebsocket;
+module.exports.express = app;
