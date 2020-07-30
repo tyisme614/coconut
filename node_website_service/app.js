@@ -3,7 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const fs = require('fs');
+const mysql = require('mysql');
+//load mysql configuration
+let config = JSON.parse(fs.readFileSync(__dirname + '/config.json').toString());
+let mysqlDB = mysql.createConnection(config);
+console.log('start connecting to mysql');
+mysqlDB.connect();
 
 let clients = [];
 
@@ -44,9 +50,7 @@ app.use(function(err, req, res, next) {
 
 //initialize socket.io
 // Create a Socket.IO instance, passing it our server
-  let socket;
-
-
+let socket;
 let initializeWebsocket = function(s){
     console.log('initialize socket');
     socket = s;
@@ -84,8 +88,83 @@ let initializeWebsocket = function(s){
             }
         });
 
+        client.on('disconnect', ()=>{
+            console.log('remote client disconnected, token-->' + client.handshake.query.token);
+        } );
+
     });
 }
 
+let check;
+
+
+
+function checkDatabase(t){
+      let sql = 'select * from analyze_record where type="' +t+ '" order by timestamp desc limit 1';
+        mysqlDB.query(sql, function (error, results, fields) {
+                if (error) throw error;
+                console.log(JSON.stringify(results));
+                if(results.length > 0){
+                    let item = results[0];
+                    let currentTS = currentEpochTime();
+                    if(currentTS - item.timestamp < 1800000 ){//use the latest result
+                        //load analysis file
+                        console.log('load file -->' + item.path);
+                        fs.readFile(item.path, (err, data) => {
+                            if(err){
+                                console.error('encountered error while loading analysis results');
+                            }
+                            if(socket != null){
+                                let message = {};
+                                message.type = 1001;
+                                message.json = data;
+                                for(let c of clients){
+                                    c.send(JSON.stringify(message));
+                                }
+                            }
+
+
+                        });
+                    }
+                }else{
+                    console.log(currentTimestamp() + '--> results not found');
+                }
+        });
+}
+
+
+
 module.exports.initializeWebsocket = initializeWebsocket;
 module.exports.express = app;
+
+//local functions
+function currentEpochTime(){
+    let timezoneOffset = new Date().getTimezoneOffset();//in minutes
+    let epoch = Date.now() + timezoneOffset * 60 * 1000;
+
+    return epoch;
+}
+
+function currentTimestamp(){
+    let ts = Date.now();
+
+    let date_ob = new Date(ts);
+    let date = date_ob.getDate();
+    date = date < 10? '0' + date : date;
+    let month = date_ob.getMonth() + 1;
+    month = month < 10? '0' + month : month;
+
+    let year = date_ob.getFullYear();
+
+    let hour = date_ob.getHours();
+    hour = hour < 10? '0' + hour : hour;
+
+    let minute = date_ob.getMinutes();
+    minute = minute < 10? '0' + minute : minute;
+
+    let second = date_ob.getSeconds();
+    second = second < 10? '0' + second : second;
+
+    return year + "-" + month + "-" + date + '_' + hour + ':' + minute +':' + second;
+
+}
