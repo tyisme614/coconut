@@ -3,9 +3,74 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <p><%= title %></p>
+    <div class="mdc-list-group" id="main_container">
+      <h3 class="mdc-list-group__subheader">List 1</h3>
+      <ul class="mdc-list">
+        <li class="mdc-list-item" tabindex="0">
+          <span class="mdc-list-item__ripple"></span>
+          <span class="mdc-list-item__text">line item</span>
+        </li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__ripple"></span>
+          <span class="mdc-list-item__text">line item</span>
+        </li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__ripple"></span>
+          <span class="mdc-list-item__text">line item</span>
+        </li>
+      </ul>
+      <h3 class="mdc-list-group__subheader">List 2</h3>
+      <ul class="mdc-list">
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__ripple"></span>
+          <span class="mdc-list-item__text">line item</span>
+        </li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__ripple"></span>
+          <span class="mdc-list-item__text">line item</span>
+        </li>
+        <li class="mdc-list-item">
+          <span class="mdc-list-item__ripple"></span>
+          <span class="mdc-list-item__text">line item</span>
+        </li>
+      </ul>
+    </div>
   </body>
+<script type="text/javascript">
+  //initialize websocket
+  let d = new Date();
+      const socket = io({
+        query:{
+          token: d.getTime()
+        }
+      });
+      socket.connect();
+  socket.on('connect',function() {
+    console.log('Client has connected to the server!');
+  });
+  // Add a connect listener
+  socket.on('message',function(data) {
+    let msg = JSON.parse(data);
+    switch(msg.type){
+      case 1001:
+        //refresh list
+            break;
+    }
+
+  });
+  // Add a disconnect listener
+  socket.on('disconnect',function() {
+    console.log('The client has disconnected!');
+
+  });
+
+</script>
 </html>
