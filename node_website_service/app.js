@@ -6,7 +6,7 @@ var logger = require('morgan');
 const io = require('socket.io');
 
 let clients = [];
-
+let server;
 //routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
