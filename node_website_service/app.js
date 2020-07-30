@@ -44,7 +44,7 @@ app.use(function(err, req, res, next) {
 
 //initialize socket.io
 // Create a Socket.IO instance, passing it our server
-  let socket = io(app);
+  let socket = io(server);
   socket.on('connection', (client) =>{
         console.log('new client connected');
         console.log('remote client\'s token is ' + client.handshake.query.token);
