@@ -89,10 +89,10 @@
                   let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
                   let list_element = '<li class="mdc-list-item">\n' +
                           ' <span class="mdc-list-item__ripple"></span>\n' +
-                          ' <a href="' + weibo_url+ '"><span class="mdc-list-item__text">\n' +
-                          '      <span class="mdc-list-item__primary-text">' + weibo.content + '</span>\n' +
+                          ' <span class="mdc-list-item__text">\n' +
+                          '      <a href="' + weibo_url+ '"><span class="mdc-list-item__primary-text">' + weibo.content + '</span></a>\n' +
                           '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
-                          ' </span></a></li>\n';
+                          ' </span></li>\n';
                   htmlText += list_element;
               }
           }
