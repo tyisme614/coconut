@@ -97,6 +97,7 @@
 
     }
 
+    console.log('requesting ' + window.location.href + '/retrieve_data' );
     var oReq = new XMLHttpRequest();
     oReq.addEventListener("load", reqListener);
     oReq.open("GET", window.location.href + '/retrieve_data');
