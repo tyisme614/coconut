@@ -46,7 +46,7 @@ app.get('/retrieve_data', (req, res) => {
                     console.log('loading analysis data -->' + r.path);
                     let analysis = {};
                     let d =  fs.readFileSync(r.path);
-                    analysis.data = d.toString();
+                    analysis.data = JSON.parse(d.toString());
                     analysis.type = r.type;
                     responseJSON.push(analysis);
                 }

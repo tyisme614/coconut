@@ -83,8 +83,8 @@
               let data = j.data;
               let title = getTitleByType(j.type);
               htmlText += '<h3>' + title + '</h3>\n';
-              for(let weiboStr of data){
-                  let weibo = JSON.parse(weiboStr);
+              for(let weibo of data){
+
                   let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
                   let list_element = '<li class="mdc-list-item">\n' +
                           ' <span class="mdc-list-item__ripple"></span>\n' +
