@@ -81,13 +81,14 @@
           let htmlText = '';
           for(let j of json){
               let data = j.data;
-              let title = getTitleByType(j.type);
-              htmlText += '<h3>' + title + '</h3>\n';
+              let title = getTitleByType(j.type) + ' Analysis Time:' + j.time;
+              htmlText += '<h3 class="mdc-list-group__subheader">' + title + '</h3>\n';
+              htmlText += '<li role="separator" class="mdc-list-divider"></li>';
               for(let weibo of data){
-
+                  let weibo_url = 'http://weibo.com/' + weibo.user_id + '/' + weibo.id;
                   let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
                   let list_element = '<li class="mdc-list-item">\n' +
-                          ' <span class="mdc-list-item__ripple"></span>\n' +
+                          ' <span class="mdc-list-item__ripple"><a href="' + weibo_url+ '"></a></span>\n' +
                           ' <span class="mdc-list-item__text">\n' +
                           '      <span class="mdc-list-item__primary-text">' + weibo.content + '</span>\n' +
                           '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +

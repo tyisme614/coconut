@@ -48,6 +48,7 @@ app.get('/retrieve_data', (req, res) => {
                     let d =  fs.readFileSync(r.path);
                     analysis.data = JSON.parse(d.toString());
                     analysis.type = r.type;
+                    analysis.time = r.time;
                     responseJSON.push(analysis);
                 }
 
