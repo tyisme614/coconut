@@ -36,11 +36,31 @@ app.use('/users', usersRouter);
 app.get('/retrieve_data', (req, res) => {
     let sql = 'select * from analyze_record order by timestamp desc limit 6';
     mysqlDB.query(sql, function (error, results, fields) {
-        if(results.length > 0){
-            res.statusCode = 200;
-            res.send(JSON.stringify(results));
+        if(error){
+            next(createError(500));
+
+        }else{
+            if(results.length > 0){
+                let responseJSON = [];
+                for(let r of results){
+                    console.log('loading analysis data -->' + r.path);
+                    let analysis = {};
+                    analysis.data = fs.readFileSync(r.path);
+                    analysis.type = r.type;
+                    responseJSON.push(analysis);
+                }
+
+                res.statusCode = 200;
+                res.send(JSON.stringify(responseJSON));
+                res.end();
+            }else{
+                next(createError(404));
+            }
+
         }
+
     });
+
 });
 
 // catch 404 and forward to error handler
