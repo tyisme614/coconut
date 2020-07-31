@@ -80,21 +80,8 @@
           let container = document.getElementById('data_container');
           let htmlText = '';
           for(let j of json){
-              let data = j.data;
-              let title = getTitleByType(j.type) + ' Analysis Time:' + j.time;
-              htmlText += '<h3 class="mdc-list-group__subheader">' + title + '</h3>\n';
-              htmlText += '<li role="separator" class="mdc-list-divider"></li>';
-              for(let weibo of data){
-                  let weibo_url = 'http://weibo.com/' + weibo.user_id + '/' + weibo.id;
-                  let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
-                  let list_element = '<li class="mdc-list-item">\n' +
-                          ' <span class="mdc-list-item__ripple"></span>\n' +
-                          ' <span class="mdc-list-item__text">\n' +
-                          '      <a href="' + weibo_url+ '"><span class="mdc-list-item__primary-text">' + weibo.content + '</span></a>\n' +
-                          '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
-                          ' </span></li>\n';
-                  htmlText += list_element;
-              }
+             let item = composeElementInList(j);
+             htmlText += item;
           }
           container.innerHTML = htmlText;
       }
@@ -108,26 +95,51 @@
     oReq.send();
   }//end of onload
 
+  function composeElementInCard(j){
+
+  }
+
+  function composeElementInList(j){
+      let htmlText = '';
+      let data = j.data;
+      let title = getTitleByType(j.type) + ' Analysis Time:' + j.time;
+      htmlText += '<h3 class="mdc-list-group__subheader">' + title + '</h3>\n';
+      htmlText += '<li role="separator" class="mdc-list-divider"></li>';
+      for(let weibo of data){
+        let weibo_url = 'http://weibo.com/' + weibo.user_id + '/' + weibo.id;
+        let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
+        let list_element = '<li class="mdc-list-item">\n' +
+                ' <span class="mdc-list-item__ripple"></span>\n' +
+                ' <span class="mdc-list-item__text">\n' +
+                '      <a href="' + weibo_url+ '"><span class="mdc-list-item__primary-text">' + weibo.content + '</span></a>\n' +
+                '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
+                ' </span></li>\n';
+        htmlText += list_element;
+      }
+
+      return htmlText;
+  }
+
   function getTitleByType(t){
     let title;
     switch(t){
       case 1001:
-        title =  'hotest likes for news';
+        title =  'Top 20 of most likes for news';
         break;
         case 1002:
-          title =  'hotest comments for news';
+          title =  'Top 20 of most  comments for news';
         break;
         case 1003:
-          title =  'hotest re-posts for news';
+          title =  'Top 20 of most  re-posts for news';
         break;
       case 1004:
-        title =  'hotest likes for entertainment messages';
+        title =  'Top 20 of most  likes for entertainment messages';
       break;
       case 1005:
-        title =  'hotest comments for entertainment messages';
+        title =  'Top 20 of most  comments for entertainment messages';
       break;
       case 1006:
-        title =  'hotest re-posts for entertainment messages';
+        title =  'Top 20 of most  re-posts for entertainment messages';
         break;
     }
 
