@@ -131,7 +131,7 @@ let initializeWebsocket = function(s){
 }
 
 console.log('start  checkWorker');
-let checkWorker = setInterval(getAllAnalysisResults, 10000);
+let checkWorker = setInterval(getAllAnalysisResults, 1800000);
 
 // console.log('start  NewsTopLikeWorker');
 // let checkNewsTopLike = setInterval(checkDatabase, 1800000, 1001);
