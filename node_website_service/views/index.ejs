@@ -105,11 +105,9 @@
           let weibo_url = 'http://weibo.com/' + weibo.user_id + '/' + weibo.id;
           let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
           let list_element = '<li class="mdc-list-item"><div class="mdc-card">\n' +
-                  ' <span class="mdc-list-item__ripple"></span>\n' +
-                  ' <span class="mdc-list-item__text">\n' +
-                  '      <a href="' + weibo_url+ '"><span class="mdc-list-item__primary-text">' + weibo.content + '</span></a>\n' +
-                  '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
-                  ' </span></div></li>\n';
+                  ' <div class="mdc-card-wrapper__text-section">' + additional_info + '</div>\n' +
+                  ' <div class="mdc-card-wrapper__text-section"><a href="' + weibo_url+ '">' + weibo.content + '</a></div>\n' +
+                  ' </div></li>\n';
           htmlText += list_element;
         }
 
