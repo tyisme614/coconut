@@ -88,7 +88,7 @@
                   let weibo_url = 'http://weibo.com/' + weibo.user_id + '/' + weibo.id;
                   let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
                   let list_element = '<li class="mdc-list-item">\n' +
-                          ' <span class="mdc-list-item__ripple"><a href="' + weibo_url+ '"></a></span>\n' +
+                          ' <a href="' + weibo_url+ '"><span class="mdc-list-item__ripple"></span></a>\n' +
                           ' <span class="mdc-list-item__text">\n' +
                           '      <span class="mdc-list-item__primary-text">' + weibo.content + '</span>\n' +
                           '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
