@@ -48,6 +48,17 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+//define routes
+app.get('/retrieve_data', (req, res) => {
+    let sql = 'select * from analyze_record order by timestamp desc limit 6';
+    mysqlDB.query(sql, function (error, results, fields) {
+            if(results.length > 0){
+                res.statusCode = 200;
+                res.send(JSON.stringify(results));
+            }
+    });
+});
+
 //initialize socket.io
 // Create a Socket.IO instance, passing it our server
 let socket;
@@ -95,7 +106,18 @@ let initializeWebsocket = function(s){
     });
 }
 
-let check;
+console.log('start  NewsTopLikeWorker');
+let checkNewsTopLike = setInterval(checkDatabase, 1800000, 1001);
+console.log('start  NewsTopCommentWorker');
+let checkNewsTopComment = setInterval(checkDatabase, 1800000, 1002);
+console.log('start  NewsTopRepostWorker');
+let checkNewsTopRepost = setInterval(checkDatabase, 1800000, 1003);
+console.log('start  EntTopLikeWorker');
+let checkEntTopLike = setInterval(checkDatabase, 1800000, 1004);
+console.log('start  EntTopCommentWorker');
+let checkEntTopComment = setInterval(checkDatabase, 1800000, 1005);
+console.log('start EntTopReposWorker');
+let checkEntTopRepost = setInterval(checkDatabase, 1800000, 1006);
 
 
 
@@ -116,7 +138,7 @@ function checkDatabase(t){
                             }
                             if(socket != null){
                                 let message = {};
-                                message.type = 1001;
+                                message.type = t;
                                 message.json = data;
                                 for(let c of clients){
                                     c.send(JSON.stringify(message));
