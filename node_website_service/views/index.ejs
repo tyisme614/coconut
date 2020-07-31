@@ -73,26 +73,29 @@
   //request all data from server
   window.onload = function(){
     function reqListener () {
-      console.log(this.responseText);
+      // console.log(this.responseText);
       console.log(this.status);
       if(this.status == 200){
           let json = JSON.parse(this.responseText);
           let container = document.getElementById('data_container');
+          let htmlText = '';
           for(let j of json){
               let data = j.data;
               let title = getTitleByType(j.type);
-              container.append('<h3>' + title + '</h3>\n');
-              for(let weibo of data){
+              htmlText += '<h3>' + title + '</h3>\n';
+              for(let weiboStr of data){
+                  let weibo = JSON.parse(weiboStr);
                   let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
                   let list_element = '<li class="mdc-list-item">\n' +
                           ' <span class="mdc-list-item__ripple"></span>\n' +
                           ' <span class="mdc-list-item__text">\n' +
                           '      <span class="mdc-list-item__primary-text">' + weibo.content + '</span>\n' +
                           '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
-                          ' </span></li>';
-                  container.append(list_element);
+                          ' </span></li>\n';
+                  htmlText += list_element;
               }
           }
+          container.innerHTML = htmlText;
       }
 
     }
