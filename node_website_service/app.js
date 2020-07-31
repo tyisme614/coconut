@@ -112,11 +112,11 @@ let initializeWebsocket = function(s){
             let msg = JSON.parse(data);
             console.log('type -->' + msg.type);
             switch(msg.type){
-                case 1000://heartbeat
+                case 9999://heartbeat
                     let token =  client.handshake.query.token;
                     console.log('heartbeat message -->' +token);
                     let response = {};
-                    response.type = 1000;
+                    response.type = 9999;
                     response.content = 'received hb msg from ' + token;
                     client.send(JSON.stringify(response));
                     break;
@@ -130,20 +130,52 @@ let initializeWebsocket = function(s){
     });
 }
 
-console.log('start  NewsTopLikeWorker');
-let checkNewsTopLike = setInterval(checkDatabase, 1800000, 1001);
-console.log('start  NewsTopCommentWorker');
-let checkNewsTopComment = setInterval(checkDatabase, 1800000, 1002);
-console.log('start  NewsTopRepostWorker');
-let checkNewsTopRepost = setInterval(checkDatabase, 1800000, 1003);
-console.log('start  EntTopLikeWorker');
-let checkEntTopLike = setInterval(checkDatabase, 1800000, 1004);
-console.log('start  EntTopCommentWorker');
-let checkEntTopComment = setInterval(checkDatabase, 1800000, 1005);
-console.log('start EntTopReposWorker');
-let checkEntTopRepost = setInterval(checkDatabase, 1800000, 1006);
+console.log('start  checkWorker');
+let checkWorker = setInterval(getAllAnalysisResults, 10000);
 
+// console.log('start  NewsTopLikeWorker');
+// let checkNewsTopLike = setInterval(checkDatabase, 1800000, 1001);
+// console.log('start  NewsTopCommentWorker');
+// let checkNewsTopComment = setInterval(checkDatabase, 1800000, 1002);
+// console.log('start  NewsTopRepostWorker');
+// let checkNewsTopRepost = setInterval(checkDatabase, 1800000, 1003);
+// console.log('start  EntTopLikeWorker');
+// let checkEntTopLike = setInterval(checkDatabase, 1800000, 1004);
+// console.log('start  EntTopCommentWorker');
+// let checkEntTopComment = setInterval(checkDatabase, 1800000, 1005);
+// console.log('start EntTopReposWorker');
+// let checkEntTopRepost = setInterval(checkDatabase, 1800000, 1006);
 
+function getAllAnalysisResults(){
+    let sql = 'select * from analyze_record order by timestamp desc limit 6';
+    mysqlDB.query(sql, function (error, results, fields) {
+        if(error){
+           log.error('encountered error when query mysql database, error-->' + error.message);
+
+        }else{
+            if(results.length > 0){
+                let responseJSON = {};
+                responseJSON.type = 2001;
+                responseJSON.analysisData = [];
+                for(let r of results){
+                    console.log('loading analysis data -->' + r.path);
+                    let analysis = {};
+                    let d =  fs.readFileSync(r.path);
+                    analysis.data = JSON.parse(d.toString());
+                    analysis.type = r.type;
+                    analysis.time = r.time;
+                    responseJSON.analysisData.push(analysis);
+                }
+                if(socket != null){
+                    for(let c of clients){
+                        c.send(JSON.stringify(responseJSON));
+                    }
+                }
+            }
+        }
+
+    });
+}
 
 function checkDatabase(t){
       let sql = 'select * from analyze_record where type="' +t+ '" order by timestamp desc limit 1';
@@ -163,7 +195,8 @@ function checkDatabase(t){
                             if(socket != null){
                                 let message = {};
                                 message.type = t;
-                                message.json = data;
+                                message.data = JSON.parse(data.toString());
+                                message.time = item.time;
                                 for(let c of clients){
                                     c.send(JSON.stringify(message));
                                 }

@@ -48,11 +48,19 @@
   socket.on('message',function(data) {
     let msg = JSON.parse(data);
     switch(msg.type){
-      case 1000://response of heartbeat message
+      case 9999://response of heartbeat message
               console.log('received heartbeat response-->' + msg.content);
         break;
-      case 1001:
+      case 2001:
         //refresh list
+            let json = msg.analysisData;
+            let container = document.getElementById('data_container');
+            let htmlText = '';
+            for(let j of json){
+                  let item = composeElementInList(j);
+                  htmlText += item;
+            }
+            container.innerHTML = htmlText;
             break;
     }
 
@@ -65,7 +73,7 @@
 
   function heartbeat(){
       let msg = {};
-      msg.type = 1000;
+      msg.type = 9999;
       msg.content = 'heartbeat message';
       socket.send(JSON.stringify(msg));
   }
