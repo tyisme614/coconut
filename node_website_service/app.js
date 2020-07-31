@@ -32,6 +32,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
+//define routes
+app.get('/retrieve_data', (req, res) => {
+    let sql = 'select * from analyze_record order by timestamp desc limit 6';
+    mysqlDB.query(sql, function (error, results, fields) {
+        if(results.length > 0){
+            res.statusCode = 200;
+            res.send(JSON.stringify(results));
+        }
+    });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -48,16 +59,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-//define routes
-app.get('/retrieve_data', (req, res) => {
-    let sql = 'select * from analyze_record order by timestamp desc limit 6';
-    mysqlDB.query(sql, function (error, results, fields) {
-            if(results.length > 0){
-                res.statusCode = 200;
-                res.send(JSON.stringify(results));
-            }
-    });
-});
+
 
 //initialize socket.io
 // Create a Socket.IO instance, passing it our server
