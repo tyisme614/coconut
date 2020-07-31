@@ -80,7 +80,7 @@
           let container = document.getElementById('data_container');
           let htmlText = '';
           for(let j of json){
-             let item = composeElementInCard(j);
+             let item = composeElementInList(j);
              htmlText += item;
           }
           container.innerHTML = htmlText;
