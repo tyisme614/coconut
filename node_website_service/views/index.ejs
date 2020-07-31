@@ -11,7 +11,7 @@
   <body>
     <h1><%= title %></h1>
     <p><%= title %></p>
-    <ul class="mdc-list mdc-list--two-line">
+    <ul class="mdc-list mdc-list--two-line" id="data_container">
       <li class="mdc-list-item" tabindex="0">
         <span class="mdc-list-item__ripple"></span>
         <span class="mdc-list-item__text">
@@ -19,13 +19,7 @@
       <span class="mdc-list-item__secondary-text">Secondary text</span>
     </span>
       </li>
-      <li class="mdc-list-item">
-        <span class="mdc-list-item__ripple"></span>
-        <span class="mdc-list-item__text">
-      <span class="mdc-list-item__primary-text">Two-line item</span>
-      <span class="mdc-list-item__secondary-text">Secondary text</span>
-    </span>
-      </li>
+
       <li class="mdc-list-item">
         <span class="mdc-list-item__ripple"></span>
         <span class="mdc-list-item__text">
@@ -74,6 +68,65 @@
       msg.type = 1000;
       msg.content = 'heartbeat message';
       socket.send(JSON.stringify(msg));
+  }
+
+  //request all data from server
+  document.onload = function(){
+    function reqListener () {
+      console.log(this.responseText);
+      console.log(this.status);
+      if(this.status == 200){
+          let json = JSON.parse(this.responseText);
+          let container = document.getElementById('data_container');
+          for(let j of json){
+              let data = j.data;
+              let title = getTitleByType(j.type);
+              container.append('<h3>' + title + '</h3>\n');
+              for(let weibo of data){
+                  let additional_info = 'time:' + weibo.publish_time + '  likes:' + weibo.up_num + ' reposts:' + weibo.retweet_num + ' comments:' + weibo.comment_num;
+                  let list_element = '<li class="mdc-list-item">\n' +
+                          ' <span class="mdc-list-item__ripple"></span>\n' +
+                          ' <span class="mdc-list-item__text">\n' +
+                          '      <span class="mdc-list-item__primary-text">' + weibo.content + '</span>\n' +
+                          '      <span class="mdc-list-item__secondary-text">' + additional_info + '</span>\n' +
+                          ' </span></li>';
+                  container.append(list_element);
+              }
+          }
+      }
+
+    }
+
+    var oReq = new XMLHttpRequest();
+    oReq.addEventListener("load", reqListener);
+    oReq.open("GET", window.location.href + '/retrieve_data');
+    oReq.send();
+  }//end of onload
+
+  function getTitleByType(t){
+    let title;
+    switch(t){
+      case 1001:
+        title =  'hotest likes for news';
+        break;
+        case 1002:
+          title =  'hotest comments for news';
+        break;
+        case 1003:
+          title =  'hotest re-posts for news';
+        break;
+      case 1004:
+        title =  'hotest likes for entertainment messages';
+      break;
+      case 1005:
+        title =  'hotest comments for entertainment messages';
+      break;
+      case 1006:
+        title =  'hotest re-posts for entertainment messages';
+        break;
+    }
+
+    return title;
   }
 </script>
 </html>
