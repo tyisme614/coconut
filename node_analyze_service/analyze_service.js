@@ -383,13 +383,16 @@ function writeToDatabase(title, type, path, time, timestamp){
 
 //return current time formatted in YYYY:MM:DD hh:mm:ss
 function getTimestamp(offset){
-    let ts = Date.now();
+    let ts = Date.now() - offset * 86400000;
 
     let date_ob = new Date(ts);
-    let date = date_ob.getDate() - offset;
-    date = date < 10? '0' + date : date;
+
     let month = date_ob.getMonth() + 1;
     month = month < 10? '0' + month : month;
+
+    let day = date_ob.getDate();
+
+    day = day < 10? '0' + day : day;
 
     let year = date_ob.getFullYear();
 
@@ -403,7 +406,7 @@ function getTimestamp(offset){
     second = second < 10? '0' + second : second;
 
     // return year + "-" + month + "-" + date + ' ' + hour + ':' + minute +':' + second;
-    return year + "-" + month + "-" + date;
+    return year + "-" + month + "-" + day;
 
 }
 
