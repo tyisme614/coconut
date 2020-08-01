@@ -163,7 +163,7 @@ function getAllAnalysisResults(){
                     let d =  fs.readFileSync(r.path);
                     analysis.data = JSON.parse(d.toString());
                     analysis.type = r.type;
-                    analysis.time = r.time;
+                    analysis.time = getTimestamp(r.timestamp);
                     responseJSON.analysisData.push(analysis);
                 }
                 if(socket != null){
@@ -175,6 +175,29 @@ function getAllAnalysisResults(){
         }
 
     });
+}
+
+function getTimestamp(ts){
+
+    let date_ob = new Date(ts);
+    let date = date_ob.getDate();
+    date = date < 10? '0' + date : date;
+    let month = date_ob.getMonth() + 1;
+    month = month < 10? '0' + month : month;
+
+    let year = date_ob.getFullYear();
+
+    let hour = date_ob.getHours();
+    hour = hour < 10? '0' + hour : hour;
+
+    let minute = date_ob.getMinutes();
+    minute = minute < 10? '0' + minute : minute;
+
+    let second = date_ob.getSeconds();
+    second = second < 10? '0' + second : second;
+
+    return year + "-" + month + "-" + date + '_' + hour + ':' + minute +':' + second;
+
 }
 
 function checkDatabase(t){
