@@ -238,7 +238,7 @@ function AnalyzeWorker(){
                         }
                     }//end of top comment news
                 }//end of analyzing list economics
-                else if(list_enterntain.includes(user_id)){
+                else if(list_entertain.includes(user_id)){
                     console.log('sort top like enterntain');
                     if(top_like_entertain.length == 0){
                         top_like_entertain[0] = item;
