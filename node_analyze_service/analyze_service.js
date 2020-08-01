@@ -7,9 +7,13 @@ const base_path = __dirname + '/rank_result/';
 const TYPE_NEWS_TOP_LIKE = 1001;
 const TYPE_NEWS_TOP_COMMENT = 1002;
 const TYPE_NEWS_TOP_REPOST = 1003;
-const TYPE_ENTERNTAIN_TOP_LIKE = 1004;
-const TYPE_ENTERNTAIN_TOP_COMMENT = 1005;
-const TYPE_ENTERNTAIN_TOP_REPOST = 1006;
+const TYPE_ECONOMICS_TOP_LIKE = 1004;
+const TYPE_ECONOMICS_TOP_COMMENT = 1005;
+const TYPE_ECONOMICS_TOP_REPOST = 1006;
+const TYPE_ENTERNTAIN_TOP_LIKE = 1007;
+const TYPE_ENTERNTAIN_TOP_COMMENT = 1008;
+const TYPE_ENTERNTAIN_TOP_REPOST = 1009;
+
 
 if(!fs.existsSync(base_path)){
     fs.mkdirSync(base_path);
@@ -21,15 +25,19 @@ let startAnalyzing = false;
 let analyzeWorker;
 
 
-const list_enterntain = ['6511184518', '345023523', '2316750444','2619805985', '6070652475', '5474178263',
-    '2110705772', '1642904381', '6051750055', '5611783716', '3200673035', '5601456932', '6523466479', '5909342713'];
-const list_news = ['1642088277', '1638782947', '1649173367', '2028810631', '2258727970', '1642585887', '1640337222',
-    '2032556081', '5567471010', '2868914317', '5436774157', '5710361656', '1644114654', '5044281310', '1686546714', '1663072851', '1499104401', '2127460165'];
+// const list_enterntain = ['6511184518', '345023523', '2316750444','2619805985', '6070652475', '5474178263',
+//     '2110705772', '1642904381', '6051750055', '5611783716', '3200673035', '5601456932', '6523466479', '5909342713'];
+// const list_news = ['1642088277', '1638782947', '1649173367', '2028810631', '2258727970', '1642585887', '1640337222',
+//     '2032556081', '5567471010', '2868914317', '5436774157', '5710361656', '1644114654', '5044281310', '1686546714', '1663072851', '1499104401', '2127460165'];
+
 
 
 //initialize configuration
 let config = JSON.parse(fs.readFileSync(__dirname + '/config.json').toString());
 
+const list_entertain = config.user_list_entertain;
+const list_news = config.user_list_news;
+const list_economics = config.user_list_economics;
 
 let mysqlDB = mysql.createConnection(config);
 console.log('start connecting to mysql');
@@ -53,6 +61,9 @@ function AnalyzeWorker(){
             let top_like_news = [];
             let top_repost_news = [];
             let top_comment_news = [];
+            let top_like_economics = [];
+            let top_repost_economics = [];
+            let top_comment_economics = [];
             let top_like_entertain = [];
             let top_repost_entertain = [];
             let top_comment_entertain = [];
@@ -144,7 +155,90 @@ function AnalyzeWorker(){
                         }
                     }//end of top comment news
 
-                }else if(list_enterntain.includes(user_id)){
+                }//end of analyzing list news
+                else if(list_economics.includes(user_id)){
+                    console.log('sort top like economics');
+                    if(top_like_economics.length == 0){
+                        top_like_economics[0] = item;
+                    }else{
+                        let j;
+                        let len2 = top_like_economics.length >= 20? 20: top_like_economics.length;
+                        for(j=0; j<len2; j++){
+                            let w = top_like_economics[j];
+                            if(w.up_num < item.up_num){
+                                //found position
+                                top_like_economics[j] = item;
+
+                                for(let k=j+1; k<len2; k++){
+                                    let tmp = top_like_economics[k];
+                                    top_like_economics[k] = w;
+                                    w = tmp;
+                                }
+                                break;
+                            }
+                        }
+                        if(j == len2){
+                            //item should be the last one in list
+                            top_like_economics[j] = item;
+                        }
+
+                    }//end of top like news
+
+                    console.log('sort top repost economics');
+                    if (top_repost_economics.length == 0) {
+                        top_repost_economics[0] = item;
+                    } else {
+                        let j;
+                        let len2 = top_repost_economics.length >= 20 ? 20 : top_repost_economics.length;
+                        for (j = 0; j < len2; j++) {
+                            let w = top_repost_economics[j];
+                            if (w.retweet_num < item.retweet_num) {
+                                //found position
+                                top_repost_economics[j] = item;
+
+                                for (let k = j + 1; k < len2; k++) {
+                                    let tmp = top_repost_economics[k];
+                                    top_repost_economics[k] = w;
+                                    w = tmp;
+                                }
+                                break;
+                            }
+                        }
+                        if (j == len2) {
+                            //item should be the last one in list
+                            top_repost_economics[j] = item;
+
+                        }
+                    }//end of repost news
+
+                    console.log('sort top comment economics');
+                    if (top_comment_economics.length == 0) {
+                        top_comment_economics[0] = item;
+                    } else {
+                        let j;
+                        let len2 = top_comment_economics.length >= 20 ? 20 : top_comment_economics.length;
+                        for (j = 0; j < len2; j++) {
+                            let w = top_comment_economics[j];
+                            if (w.comment_num < item.comment_num) {
+                                //found position
+                                top_comment_economics[j] = item;
+
+                                for (let k = j + 1; k < len2; k++) {
+                                    let tmp = top_comment_economics[k];
+                                    top_comment_economics[k] = w;
+                                    w = tmp;
+                                }
+                                break;
+                            }
+                        }
+                        if (j == len2) {
+                            //item should be the last one in list
+                            top_comment_economics[j] = item;
+
+                        }
+                    }//end of top comment news
+                }//end of analyzing list economics
+                else if(list_enterntain.includes(user_id)){
                     console.log('sort top like enterntain');
                     if(top_like_entertain.length == 0){
                         top_like_entertain[0] = item;
@@ -225,7 +319,7 @@ function AnalyzeWorker(){
 
                         }
                     }//end of top comment news
-                }
+                }//end of analyzing list entertain
             }
             let ts = currentTimestamp();
             let epoch = currentEpochTime();
@@ -238,6 +332,15 @@ function AnalyzeWorker(){
 
             writeToLocalFile(JSON.stringify(top_comment_news), base_path + ts  + '_top_comment_news.json');
             writeToDatabase('top_comment_news_' + ts, TYPE_NEWS_TOP_COMMENT,base_path + ts  + '_top_like_news.json', ts_db, epoch);
+
+            writeToLocalFile(JSON.stringify(top_like_economics), base_path + ts  + '_top_like_economics.json');
+            writeToDatabase('top_like_economics_' + ts, TYPE_ECONOMICS_TOP_LIKE,base_path + ts  + '_top_like_economics.json', ts_db, epoch);
+
+            writeToLocalFile(JSON.stringify(top_repost_economics), base_path + ts  + '_top_repost_economics.json');
+            writeToDatabase('top_repost_economics_' + ts, TYPE_ECONOMICS_TOP_REPOST,base_path + ts  + '_top_repost_economics.json', ts_db, epoch);
+
+            writeToLocalFile(JSON.stringify(top_comment_economics), base_path + ts  + '_top_comment_economics.json');
+            writeToDatabase('top_comment_economics_' + ts, TYPE_ECONOMICS_TOP_COMMENT,base_path + ts  + '_top_comment_economics.json', ts_db, epoch);
 
             writeToLocalFile(JSON.stringify(top_like_entertain), base_path + ts  + '_top_like_entertain.json');
             writeToDatabase('top_like_entertain_' + ts, TYPE_ENTERNTAIN_TOP_LIKE,base_path + ts  + '_top_like_entertain.json', ts_db, epoch);

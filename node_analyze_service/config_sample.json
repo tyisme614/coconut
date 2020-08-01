@@ -6,5 +6,5 @@
   "database" : "default database to connect to",
   "user_list_news": [],
   "user_list_entertain" :  [],
-  "user_list_finance" : []
+  "user_list_economics" : []
 }
