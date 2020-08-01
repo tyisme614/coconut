@@ -12,21 +12,7 @@
     <h1><%= title %></h1>
 
     <ul class="mdc-list mdc-list--two-line" id="data_container">
-      <li class="mdc-list-item" tabindex="0">
-        <span class="mdc-list-item__ripple"></span>
-        <span class="mdc-list-item__text">
-      <span class="mdc-list-item__primary-text">Two-line item</span>
-      <span class="mdc-list-item__secondary-text">Secondary text</span>
-    </span>
-      </li>
 
-      <li class="mdc-list-item">
-        <span class="mdc-list-item__ripple"></span>
-        <span class="mdc-list-item__text">
-      <span class="mdc-list-item__primary-text">Two-line item</span>
-      <span class="mdc-list-item__secondary-text">Secondary text</span>
-    </span>
-      </li>
     </ul>
   </body>
 <script type="text/javascript">
@@ -41,7 +27,7 @@
       socket.connect();
   socket.on('connect',function() {
     console.log('Client has connected to the server! start interval');
-    heartbeatWorker = setInterval(heartbeat, 5000);
+    heartbeatWorker = setInterval(heartbeat, 60000);
 
   });
   // Add a connect listener
@@ -150,19 +136,28 @@
         title =  'Top 20 of most likes for news';
         break;
         case 1002:
-          title =  'Top 20 of most  comments for news';
+          title =  'Top 20 of most comments for news';
         break;
         case 1003:
-          title =  'Top 20 of most  re-posts for news';
+          title =  'Top 20 of most re-posts for news';
         break;
       case 1004:
-        title =  'Top 20 of most  likes for entertainment messages';
+        title =  'Top 20 of most likes for economical messages';
       break;
       case 1005:
-        title =  'Top 20 of most  comments for entertainment messages';
+        title =  'Top 20 of most comments for economical messages';
       break;
       case 1006:
-        title =  'Top 20 of most  re-posts for entertainment messages';
+        title =  'Top 20 of most re-posts for economical messages';
+        break;
+      case 1007:
+        title =  'Top 20 of most likes for entertainment messages';
+        break;
+      case 1008:
+        title =  'Top 20 of most comments for entertainment messages';
+        break;
+      case 1009:
+        title =  'Top 20 of most re-posts for entertainment messages';
         break;
     }
 

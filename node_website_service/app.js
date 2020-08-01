@@ -34,7 +34,7 @@ app.use('/users', usersRouter);
 
 //define routes
 app.get('/retrieve_data', (req, res) => {
-    let sql = 'select * from analyze_record order by timestamp desc limit 6';
+    let sql = 'select * from analyze_record order by timestamp desc limit 9';
     mysqlDB.query(sql, function (error, results, fields) {
         if(error){
             next(createError(500));
