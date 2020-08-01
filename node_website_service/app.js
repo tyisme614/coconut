@@ -147,7 +147,7 @@ let checkWorker = setInterval(getAllAnalysisResults, 1800000);
 // let checkEntTopRepost = setInterval(checkDatabase, 1800000, 1006);
 
 function getAllAnalysisResults(){
-    let sql = 'select * from analyze_record order by timestamp desc limit 6';
+    let sql = 'select * from analyze_record order by timestamp desc limit 9';
     mysqlDB.query(sql, function (error, results, fields) {
         if(error){
            log.error('encountered error when query mysql database, error-->' + error.message);
